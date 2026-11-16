@@ -1,6 +1,8 @@
 package service
 
 import (
+	"net/http"
+
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -10,9 +12,14 @@ type Context[T Config] interface {
 	InitPlugin(server *rest.Server, serviceObject ServiceObject[T]) bool
 }
 
+type Interceptor interface {
+	Handle(next http.HandlerFunc) http.HandlerFunc
+}
+
 type ServiceContext[T Config] struct {
-	Services    map[string]ServiceObject[T] //注册服务组件
-	RedisClient *redis.Redis
+	Services     map[string]ServiceObject[T] //注册服务组件
+	Interceptors map[string]Interceptor
+	RedisClient  *redis.Redis
 	Context[T]
 }
 

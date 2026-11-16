@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/DeleteElf/zero-web-core/core/middleware"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -12,14 +11,15 @@ type RpcClientServiceContext struct {
 	ServiceContext[RpcClientConf]
 }
 
-func NewRpcClientServiceContextt(c RpcClientConf) *RpcClientServiceContext {
+func NewRpcClientServiceContext(c RpcClientConf) *RpcClientServiceContext {
 	redisClient := redis.MustNewRedis(c.Redis.RedisConf) //加入redis 2
 	return &RpcClientServiceContext{
-		Config:          c,
-		AuthInterceptor: middleware.NewAuthInterceptor(redisClient).Handle, //初始化中间件
+		Config: c,
+		//AuthInterceptor: middleware.NewAuthInterceptor(redisClient).Handle, //初始化中间件
 		ServiceContext: ServiceContext[RpcClientConf]{
-			Services:    make(map[string]ServiceObject[RpcClientConf]), //初始化服务容器
-			RedisClient: redisClient,
+			Services:     make(map[string]ServiceObject[RpcClientConf]), //初始化服务容器
+			Interceptors: make(map[string]Interceptor),                  //初始化拦截器中间件
+			RedisClient:  redisClient,
 		},
 	}
 }
