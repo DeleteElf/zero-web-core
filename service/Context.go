@@ -1,8 +1,6 @@
 package service
 
 import (
-	"net/http"
-
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -12,14 +10,11 @@ type Context[T Config] interface {
 	InitPlugin(server *rest.Server, serviceObject ServiceObject[T]) bool
 }
 
-type Interceptor interface {
-	Handle(next http.HandlerFunc) http.HandlerFunc
-}
-
 type ServiceContext[T Config] struct {
-	Services     map[string]ServiceObject[T] //注册服务组件
-	Interceptors map[string]Interceptor
-	RedisClient  *redis.Redis
+	Config      T
+	Services    map[string]ServiceObject[T] //注册服务组件
+	Middlewares map[string]rest.Middleware
+	RedisClient *redis.Redis
 	Context[T]
 }
 
@@ -36,4 +31,27 @@ type ServiceObject[T Config] struct {
 	Enabled            bool
 	SupportServiceType ServiceType
 	Service[T]
+}
+
+func NewServiceContext[T Config](cfg T) *ServiceContext[T] {
+	redisClient := redis.MustNewRedis(cfg.GetRedisConf().RedisConf) //加入redis 2
+	return &ServiceContext[T]{
+		Config:      cfg,
+		Services:    make(map[string]ServiceObject[T]), //初始化服务容器
+		Middlewares: make(map[string]rest.Middleware),  //初始化拦截器中间件
+		RedisClient: redisClient,
+	}
+}
+
+func (s *ServiceContext[T]) InitPlugin(server *rest.Server, serviceObject ServiceObject[T]) bool {
+	result, hasKey := s.Config.GetPlugins()[serviceObject.Name]
+	if !hasKey {
+		return false
+	}
+	serviceObject.Enabled = result
+	if !result {
+		return false
+	}
+	serviceObject.RegisterHandlers(server, s)
+	return true
 }

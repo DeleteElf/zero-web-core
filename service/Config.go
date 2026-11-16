@@ -8,18 +8,28 @@ import (
 )
 
 type Config interface {
+	GetPlugins() map[string]bool // 所有 T 都必须提供
+	GetRedisConf() redis.RedisKeyConf
 }
 
 type ServiceConf struct {
 	// Service 服务类型 Rest 1 EtcdClient 2 EtcdServer 4,如果没有配置，默认是Website 1
 	Service ServiceType     `json:",default=1"`
 	Plugins map[string]bool `json:"Plugins"`
+	Redis   redis.RedisKeyConf
+	Config
+}
+
+func (sc *ServiceConf) GetPlugins() map[string]bool {
+	return sc.Plugins
+}
+func (sc *ServiceConf) GetRedisConf() redis.RedisKeyConf {
+	return sc.Redis
 }
 
 type SessionConf struct {
 	SessionTime      int   `json:",default=1800"`
 	TokenReplaceTime int64 `json:",default=86400"`
-	Config
 }
 
 type Domain struct {
@@ -50,23 +60,17 @@ type RestConf struct {
 	ServiceConf
 	rest.RestConf
 	DbConfig ado.DbConfig
-	Redis    redis.RedisKeyConf
 	SessionConf
-	Config
 }
 
 type RpcServerConf struct {
 	ServiceConf
 	zrpc.RpcServerConf
 	DbConfig ado.DbConfig
-	Redis    redis.RedisKeyConf
-	Config   //理论上rpc服务端，并不会去验证session 和token
 }
 type RpcClientConf struct {
 	ServiceConf
 	rest.RestConf
 	zrpc.RpcClientConf
-	Redis redis.RedisKeyConf //客户端是否需要，还待定
 	SessionConf
-	Config
 }
