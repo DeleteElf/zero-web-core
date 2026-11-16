@@ -8,6 +8,7 @@ import (
 // Context 服务上下文接口
 type Context[T Config] interface {
 	InitPlugin(server *rest.Server, serviceObject ServiceObject[T]) bool
+	GetService(key string) (ServiceObject[T], bool)
 }
 
 type ServiceContext[T Config] struct {
@@ -21,7 +22,7 @@ type ServiceContext[T Config] struct {
 // Service 基础服务接口
 type Service[T Config] interface {
 	// RegisterHandlers 注册服务，需要处理具体的领域业务和中间件加载逻辑
-	RegisterHandlers(server *rest.Server, serverCtx Context[T])
+	RegisterHandlers(server *rest.Server, serverCtx ServiceContext[T])
 }
 
 // ServiceObject 基础服务对象，需要实现服务接口
@@ -43,7 +44,7 @@ func NewServiceContext[T Config](cfg T) *ServiceContext[T] {
 	}
 }
 
-func (s *ServiceContext[T]) InitPlugin(server *rest.Server, serviceObject ServiceObject[T]) bool {
+func (s ServiceContext[T]) InitPlugin(server *rest.Server, serviceObject ServiceObject[T]) bool {
 	result, hasKey := s.Config.GetPlugins()[serviceObject.Name]
 	if !hasKey {
 		return false
@@ -55,3 +56,20 @@ func (s *ServiceContext[T]) InitPlugin(server *rest.Server, serviceObject Servic
 	serviceObject.RegisterHandlers(server, s)
 	return true
 }
+
+func (s ServiceContext[T]) GetService(key string) (*ServiceObject[T], bool) {
+	result, ok := s.Services[key]
+	if !ok {
+		return nil, ok
+	}
+	return &result, ok
+}
+
+// RestServiceContext Rest服务上下文，泛型的确定形态
+type RestServiceContext ServiceContext[RestConf]
+
+// RpcClientServiceContext Rpc客户端服务上下文，泛型的确定形态
+type RpcClientServiceContext ServiceContext[RpcClientConf]
+
+// RpcServerServiceContext Rpc服务端服务上下文，泛型的确定形态
+type RpcServerServiceContext ServiceContext[RpcServerConf]

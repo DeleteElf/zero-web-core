@@ -9,7 +9,8 @@ import (
 
 type Config interface {
 	GetPlugins() map[string]bool // 所有 T 都必须提供
-	GetRedisConf() redis.RedisKeyConf
+	GetRedisConf() *redis.RedisKeyConf
+	GetDbConfig() *ado.DbConfig
 }
 
 type ServiceConf struct {
@@ -17,14 +18,15 @@ type ServiceConf struct {
 	Service ServiceType     `json:",default=1"`
 	Plugins map[string]bool `json:"Plugins"`
 	Redis   redis.RedisKeyConf
-	Config
+	SessionConf
+	Config `json:"-"`
 }
 
-func (sc *ServiceConf) GetPlugins() map[string]bool {
+func (sc ServiceConf) GetPlugins() map[string]bool {
 	return sc.Plugins
 }
-func (sc *ServiceConf) GetRedisConf() redis.RedisKeyConf {
-	return sc.Redis
+func (sc ServiceConf) GetRedisConf() *redis.RedisKeyConf {
+	return &sc.Redis
 }
 
 type SessionConf struct {
@@ -45,7 +47,7 @@ const (
 	// EtcdClient 用于支持etcd集群的客户端
 	EtcdClient //ServiceType = "client"
 	// EtcdServer 用于支持etcd集群的服务端
-	EtcdServer //ServiceType = "server"
+	EtcdServer //ServiceType = "service"
 )
 
 func (e ServiceType) IsValid() bool {
@@ -60,7 +62,10 @@ type RestConf struct {
 	ServiceConf
 	rest.RestConf
 	DbConfig ado.DbConfig
-	SessionConf
+}
+
+func (rc RestConf) GetDbConfig() *ado.DbConfig {
+	return &rc.DbConfig
 }
 
 type RpcServerConf struct {
@@ -68,9 +73,17 @@ type RpcServerConf struct {
 	zrpc.RpcServerConf
 	DbConfig ado.DbConfig
 }
+
+func (rsc RpcServerConf) GetDbConfig() *ado.DbConfig {
+	return &rsc.DbConfig
+}
+
 type RpcClientConf struct {
 	ServiceConf
 	rest.RestConf
 	zrpc.RpcClientConf
-	SessionConf
+}
+
+func (rcc RpcClientConf) GetDbConfig() *ado.DbConfig {
+	return nil
 }
