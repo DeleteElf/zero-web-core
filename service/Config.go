@@ -47,7 +47,7 @@ const (
 	// EtcdClient 用于支持etcd集群的客户端
 	EtcdClient //ServiceType = "client"
 	// EtcdServer 用于支持etcd集群的服务端
-	EtcdServer //ServiceType = "service"
+	EtcdServer //ServiceType = "server"
 )
 
 func (e ServiceType) IsValid() bool {
