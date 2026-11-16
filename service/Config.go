@@ -11,10 +11,13 @@ type Config interface {
 	GetPlugins() map[string]bool // 所有 T 都必须提供
 	GetRedisConf() *redis.RedisKeyConf
 	GetDbConfig() *ado.DbConfig
+	GetServiceType() ServiceType
+	GetTokenReplaceTime() int64
+	GetSessionTime() int
 }
 
 type ServiceConf struct {
-	// Service 服务类型 Rest 1 EtcdClient 2 EtcdServer 4,如果没有配置，默认是Website 1
+	// Service 服务类型 Rest 1 RpcClient 2 RpcServer 4,如果没有配置，默认是Website 1
 	Service ServiceType     `json:",default=1"`
 	Plugins map[string]bool `json:"Plugins"`
 	Redis   redis.RedisKeyConf
@@ -27,6 +30,16 @@ func (sc ServiceConf) GetPlugins() map[string]bool {
 }
 func (sc ServiceConf) GetRedisConf() *redis.RedisKeyConf {
 	return &sc.Redis
+}
+func (sc ServiceConf) GetServiceType() ServiceType {
+	return sc.Service
+}
+
+func (sc ServiceConf) GetTokenReplaceTime() int64 {
+	return sc.TokenReplaceTime
+}
+func (sc ServiceConf) GetSessionTime() int {
+	return sc.SessionTime
 }
 
 type SessionConf struct {
@@ -44,15 +57,15 @@ type ServiceType int
 const (
 	// Rest 独立网站
 	Rest ServiceType = 1 << iota // "website"
-	// EtcdClient 用于支持etcd集群的客户端
-	EtcdClient //ServiceType = "client"
-	// EtcdServer 用于支持etcd集群的服务端
-	EtcdServer //ServiceType = "server"
+	// RpcClient 用于支持etcd集群的客户端
+	RpcClient //ServiceType = "client"
+	// RpcServer 用于支持etcd集群的服务端
+	RpcServer //ServiceType = "server"
 )
 
 func (e ServiceType) IsValid() bool {
 	switch e {
-	case Rest, EtcdClient, EtcdServer:
+	case Rest, RpcClient, RpcServer:
 		return true
 	}
 	return false
