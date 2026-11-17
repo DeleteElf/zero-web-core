@@ -1,4 +1,4 @@
-package service
+package ctx
 
 import (
 	"github.com/deleteelf/zero-core/ado"
@@ -74,21 +74,21 @@ func (e ServiceType) IsValid() bool {
 type RestConf struct {
 	ServiceConf
 	rest.RestConf
-	DbConfig ado.DbConfig
+	DbConfig *ado.DbConfig
 }
 
 func (rc RestConf) GetDbConfig() *ado.DbConfig {
-	return &rc.DbConfig
+	return rc.DbConfig
 }
 
 type RpcServerConf struct {
 	ServiceConf
 	zrpc.RpcServerConf
-	DbConfig ado.DbConfig
+	DbConfig *ado.DbConfig
 }
 
 func (rsc RpcServerConf) GetDbConfig() *ado.DbConfig {
-	return &rsc.DbConfig
+	return rsc.DbConfig
 }
 
 type RpcClientConf struct {
