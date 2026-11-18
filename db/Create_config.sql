@@ -1,0 +1,762 @@
+﻿/*==============================================================*/
+/* DBMS name:      PostgreSQL 9.x                               */
+/* Created on:     2026/11/18 16:31:02                          */
+/*==============================================================*/
+
+
+/*==============================================================*/
+/* Table: T_JSON_GROUP                                          */
+/*==============================================================*/
+CREATE TABLE T_JSON_GROUP (
+   F_ID                 SERIAL NOT NULL,
+   F_PARENT_ID          INT8                 NOT NULL DEFAULT 0,
+   F_NAME               VARCHAR(50)          NOT NULL,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_JSON_GROUP PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_JSON_GROUP IS
+'json数据分组';
+
+COMMENT ON COLUMN T_JSON_GROUP.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_JSON_GROUP.F_PARENT_ID IS
+'上级编号';
+
+COMMENT ON COLUMN T_JSON_GROUP.F_NAME IS
+'名称';
+
+COMMENT ON COLUMN T_JSON_GROUP.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_JSON_GROUP.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_JSON_GROUP.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_JSON_GROUP.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_JSON_GROUP.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_JSON_ITEM                                           */
+/*==============================================================*/
+CREATE TABLE T_JSON_ITEM (
+   F_ID                 SERIAL NOT NULL,
+   F_GROUP_ID           INT8                 NOT NULL,
+   F_NAME               VARCHAR(50)          NOT NULL,
+   F_HANDLE_RIGHT       VARCHAR(50)          NULL,
+   F_ENABLE_TRANS       BOOL                 NOT NULL DEFAULT FALSE,
+   F_CACHE_TYPE         VARCHAR(20)          NOT NULL DEFAULT 'false',
+   F_CACHE_COUNT        INT4                 NOT NULL DEFAULT 0,
+   F_CACHE_MIN_SIZE     INT4                 NOT NULL DEFAULT 100,
+   F_DATASOURCE         VARCHAR(10)          NULL,
+   F_BEFORE             TEXT                 NULL,
+   F_COMMAND_TEXT       TEXT                 NOT NULL,
+   F_AFTER              TEXT                 NULL,
+   F_PUBLISHED          BOOL                 NOT NULL DEFAULT FALSE,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_JSON_ITEM PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_JSON_ITEM IS
+'json数据源项';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_GROUP_ID IS
+'分组编号';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_NAME IS
+'名称';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_HANDLE_RIGHT IS
+'权限';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_ENABLE_TRANS IS
+'是否启用事务：默认关闭';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_CACHE_TYPE IS
+'是否启用事务：默认关闭';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_CACHE_COUNT IS
+'是否启用事务：默认关闭';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_CACHE_MIN_SIZE IS
+'最小缓存长度';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_DATASOURCE IS
+'数据源名称';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_BEFORE IS
+'执行前语句';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_COMMAND_TEXT IS
+'执行语句';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_AFTER IS
+'执行后语句';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_PUBLISHED IS
+'是否发布';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_JSON_ITEM.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_JSON_TREE_GROUP                                     */
+/*==============================================================*/
+CREATE TABLE T_JSON_TREE_GROUP (
+   F_ID                 SERIAL NOT NULL,
+   F_PARENT_ID          INT8                 NOT NULL DEFAULT 0,
+   F_NAME               VARCHAR(50)          NOT NULL,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_JSON_TREE_GROUP PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_JSON_TREE_GROUP IS
+'json树型数据分组';
+
+COMMENT ON COLUMN T_JSON_TREE_GROUP.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_JSON_TREE_GROUP.F_PARENT_ID IS
+'上级编号';
+
+COMMENT ON COLUMN T_JSON_TREE_GROUP.F_NAME IS
+'名称';
+
+COMMENT ON COLUMN T_JSON_TREE_GROUP.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_JSON_TREE_GROUP.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_JSON_TREE_GROUP.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_JSON_TREE_GROUP.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_JSON_TREE_GROUP.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_REPORT_GROUP                                        */
+/*==============================================================*/
+CREATE TABLE T_REPORT_GROUP (
+   F_ID                 SERIAL NOT NULL,
+   F_PARENT_ID          INT8                 NOT NULL DEFAULT 0,
+   F_NAME               VARCHAR(50)          NOT NULL,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_REPORT_GROUP PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_REPORT_GROUP IS
+'报表分组';
+
+COMMENT ON COLUMN T_REPORT_GROUP.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_REPORT_GROUP.F_PARENT_ID IS
+'上级编号';
+
+COMMENT ON COLUMN T_REPORT_GROUP.F_NAME IS
+'名称';
+
+COMMENT ON COLUMN T_REPORT_GROUP.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_REPORT_GROUP.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_REPORT_GROUP.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_REPORT_GROUP.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_REPORT_GROUP.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_REPORT_ITEM                                         */
+/*==============================================================*/
+CREATE TABLE T_REPORT_ITEM (
+   F_ID                 SERIAL NOT NULL,
+   F_GROUP_ID           INT8                 NOT NULL,
+   F_NAME               VARCHAR(50)          NOT NULL,
+   F_TEMPLATE           TEXT                 NOT NULL,
+   F_PUBLISHED          BOOL                 NOT NULL DEFAULT FALSE,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_REPORT_ITEM PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_REPORT_ITEM IS
+'报表';
+
+COMMENT ON COLUMN T_REPORT_ITEM.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_REPORT_ITEM.F_GROUP_ID IS
+'分组编号';
+
+COMMENT ON COLUMN T_REPORT_ITEM.F_NAME IS
+'名称';
+
+COMMENT ON COLUMN T_REPORT_ITEM.F_TEMPLATE IS
+'模板';
+
+COMMENT ON COLUMN T_REPORT_ITEM.F_PUBLISHED IS
+'是否发布';
+
+COMMENT ON COLUMN T_REPORT_ITEM.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_REPORT_ITEM.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_REPORT_ITEM.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_REPORT_ITEM.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_REPORT_ITEM.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_REPORT_TABLE                                        */
+/*==============================================================*/
+CREATE TABLE T_REPORT_TABLE (
+   F_ID                 SERIAL NOT NULL,
+   F_REPORT_ID          INT8                 NOT NULL,
+   F_NAME               VARCHAR(50)          NOT NULL,
+   F_DATASOURCE_NAME    VARCHAR(50)          NULL,
+   F_COMMAND_TEXT       TEXT                 NOT NULL,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_REPORT_TABLE PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_REPORT_TABLE IS
+'报表数据源';
+
+COMMENT ON COLUMN T_REPORT_TABLE.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_REPORT_TABLE.F_REPORT_ID IS
+'报表编号';
+
+COMMENT ON COLUMN T_REPORT_TABLE.F_NAME IS
+'名称';
+
+COMMENT ON COLUMN T_REPORT_TABLE.F_DATASOURCE_NAME IS
+'数据源名称';
+
+COMMENT ON COLUMN T_REPORT_TABLE.F_COMMAND_TEXT IS
+'数据查询语句';
+
+COMMENT ON COLUMN T_REPORT_TABLE.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_REPORT_TABLE.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_REPORT_TABLE.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_REPORT_TABLE.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_REPORT_TABLE.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_FORM_GROUP                                          */
+/*==============================================================*/
+CREATE TABLE T_FORM_GROUP (
+   F_ID                 SERIAL NOT NULL,
+   F_PARENT_ID          INT8                 NOT NULL DEFAULT 0,
+   F_NAME               VARCHAR(50)          NOT NULL,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_FORM_GROUP PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_FORM_GROUP IS
+'表单分组';
+
+COMMENT ON COLUMN T_FORM_GROUP.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_FORM_GROUP.F_PARENT_ID IS
+'上级编号';
+
+COMMENT ON COLUMN T_FORM_GROUP.F_NAME IS
+'名称';
+
+COMMENT ON COLUMN T_FORM_GROUP.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_FORM_GROUP.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_FORM_GROUP.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_FORM_GROUP.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_FORM_GROUP.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_FORM_CONFIG                                         */
+/*==============================================================*/
+CREATE TABLE T_FORM_CONFIG (
+   F_ID                 SERIAL NOT NULL,
+   F_GROUP_ID           INT8                 NOT NULL,
+   F_NAME               VARCHAR(50)          NULL,
+   F_SERVICE            VARCHAR(100)         NULL,
+   F_CODE               VARCHAR(100)         NULL,
+   F_PK_COLUMN          VARCHAR(30)          NULL,
+   F_ADD_RIGHT          VARCHAR(50)          NULL,
+   F_MOD_RIGHT          VARCHAR(50)          NULL,
+   F_DEL_RIGHT          VARCHAR(50)          NULL,
+   F_LOG_MODULE         VARCHAR(50)          NULL,
+   F_LOG_MESSAGE        VARCHAR(50)          NULL,
+   F_SCRIPT_STRING      TEXT                 NULL,
+   F_PUBLISHED          BOOL                 NOT NULL DEFAULT FALSE,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_FORM_CONFIG PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_FORM_CONFIG IS
+'配置化表单';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_GROUP_ID IS
+'分组编号';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_NAME IS
+'表单名称';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_SERVICE IS
+'保存服务类';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_CODE IS
+'表单类';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_PK_COLUMN IS
+'主键字段';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_ADD_RIGHT IS
+'新增权限';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_MOD_RIGHT IS
+'修改权限';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_DEL_RIGHT IS
+'删除权限';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_LOG_MODULE IS
+'日志模块';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_LOG_MESSAGE IS
+'日志信息';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_SCRIPT_STRING IS
+'js脚本';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_PUBLISHED IS
+'是否发布';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_FORM_CONFIG.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_FORM_FOR_ME                                         */
+/*==============================================================*/
+CREATE TABLE T_FORM_FOR_ME (
+   F_ID                 SERIAL NOT NULL,
+   F_DISPLAY_NAME       VARCHAR(50)          NOT NULL,
+   F_ACTION_URL         VARCHAR(300)         NOT NULL,
+   F_USER               VARCHAR(20)          NULL,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_FORM_FOR_ME PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_FORM_FOR_ME IS
+'常用表单';
+
+COMMENT ON COLUMN T_FORM_FOR_ME.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_FORM_FOR_ME.F_DISPLAY_NAME IS
+'显示名称';
+
+COMMENT ON COLUMN T_FORM_FOR_ME.F_ACTION_URL IS
+'请求URL';
+
+COMMENT ON COLUMN T_FORM_FOR_ME.F_USER IS
+'用户';
+
+COMMENT ON COLUMN T_FORM_FOR_ME.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_FORM_FOR_ME.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_FORM_FOR_ME.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_FORM_FOR_ME.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_FORM_FOR_ME.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_FORM_ITEM                                           */
+/*==============================================================*/
+CREATE TABLE T_FORM_ITEM (
+   F_ID                 SERIAL NOT NULL,
+   F_FORM_ID            INT8                 NULL,
+   F_NAME               VARCHAR(20)          NOT NULL,
+   F_CODE               VARCHAR(50)          NULL,
+   F_TYPE               VARCHAR(20)          NOT NULL,
+   F_COLUMN_COUNT       INT2                 NOT NULL DEFAULT 1,
+   F_DATASOURCE         VARCHAR(50)          NULL,
+   F_SEARCH_SQL         VARCHAR(2000)        NULL,
+   F_LINKAGE_RULE       VARCHAR(2000)        NULL,
+   F_DEFAULT_VALUE      VARCHAR(50)          NULL,
+   F_BOOLEAN_TEXT       VARCHAR(20)          NULL,
+   F_IS_EMPTY           BOOL                 NOT NULL DEFAULT FALSE,
+   F_IS_VISIBLE         BOOL                 NULL DEFAULT TRUE,
+   F_VALIDATE_REGEX     VARCHAR(100)         NULL,
+   F_FORMAT_STRING      VARCHAR(100)         NULL,
+   F_DEFAULT_VALUE_DATASOURCE VARCHAR(50)          NULL,
+   F_DEFAULT_VALUE_SQL  VARCHAR(500)         NULL,
+   F_JS_CHANGE          TEXT                 NULL,
+   F_ADD_READONLY       BOOL                 NULL DEFAULT FALSE,
+   F_MOD_READONLY       BOOL                 NULL DEFAULT FALSE,
+   F_MESSAGE            VARCHAR(100)         NULL,
+   F_UNIT               VARCHAR(10)          NULL,
+   F_STYLE              VARCHAR(100)         NULL,
+   F_URL                VARCHAR(256)         NULL,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_FORM_ITEM PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_FORM_ITEM IS
+'表单字段';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_FORM_ID IS
+'所属表单';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_NAME IS
+'字段名称';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_CODE IS
+'字段编码';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_TYPE IS
+'值类型';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_COLUMN_COUNT IS
+'列数';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_DATASOURCE IS
+'数据源';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_SEARCH_SQL IS
+'数据源查询语句';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_LINKAGE_RULE IS
+'联动规则';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_DEFAULT_VALUE IS
+'默认值';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_BOOLEAN_TEXT IS
+'布尔值文本';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_IS_EMPTY IS
+'是否可空';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_IS_VISIBLE IS
+'是否可见';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_VALIDATE_REGEX IS
+'验证正则表达式';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_FORMAT_STRING IS
+'格式化字符串';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_DEFAULT_VALUE_DATASOURCE IS
+'默认值数据源';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_DEFAULT_VALUE_SQL IS
+'默认值查询语句';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_JS_CHANGE IS
+'change的js脚本';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_ADD_READONLY IS
+'新增只读';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_MOD_READONLY IS
+'修改只读';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_MESSAGE IS
+'验证不通过显示的消息';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_UNIT IS
+'单位';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_STYLE IS
+'样式';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_URL IS
+'链接';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_FORM_ITEM.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_FORM_TOOLBAR_ITEM                                   */
+/*==============================================================*/
+CREATE TABLE T_FORM_TOOLBAR_ITEM (
+   F_ID                 SERIAL NOT NULL,
+   F_FORM_ID            INT8                 NULL,
+   F_POSITION           VARCHAR(10)          NULL,
+   F_CODE               VARCHAR(50)          NULL,
+   F_NAME               VARCHAR(50)          NULL,
+   F_CONDITION_TEMPLATE VARCHAR(50)          NULL,
+   F_STYLE              VARCHAR(50)          NULL,
+   F_HANDLE_RIGHT       VARCHAR(50)          NULL,
+   F_ACTION_URL         VARCHAR(200)         NULL,
+   F_LINKAGE_RULE       VARCHAR(500)         NULL,
+   F_FORMAT_STRING      VARCHAR(50)          NULL,
+   F_TYPE               VARCHAR(50)          NULL,
+   F_SCRIPT_STRING      TEXT                 NULL,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_FORM_TOOLBAR_ITEM PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_FORM_TOOLBAR_ITEM IS
+'工具栏组件';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_FORM_ID IS
+'所属表单';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_POSITION IS
+'停靠区域';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_CODE IS
+'名称代码';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_NAME IS
+'显示名称';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_CONDITION_TEMPLATE IS
+'条件模板';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_STYLE IS
+'样式';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_HANDLE_RIGHT IS
+'权限';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_ACTION_URL IS
+'请求URL';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_LINKAGE_RULE IS
+'联动规则';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_FORMAT_STRING IS
+'格式化字符串';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_TYPE IS
+'组件类型';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_SCRIPT_STRING IS
+'js脚本';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_FORM_TOOLBAR_ITEM.F_REMARK IS
+'备注';
+
+/*==============================================================*/
+/* Table: T_JSON_TREE_DATA                                      */
+/*==============================================================*/
+CREATE TABLE T_JSON_TREE_DATA (
+   F_ID                 SERIAL NOT NULL,
+   F_GROUP_ID           INT8                 NOT NULL,
+   F_NAME               VARCHAR(50)          NOT NULL,
+   F_DATASOURCE         VARCHAR(10)          NULL,
+   F_TABLE_NAME         VARCHAR(50)          NOT NULL,
+   F_CONDITION          VARCHAR(150)         NOT NULL,
+   F_RECURSIVE_TABLE_NAME VARCHAR(50)          NOT NULL,
+   F_RECURSIVE_CONDITION VARCHAR(200)         NOT NULL,
+   F_COMMAND_TEXT       TEXT                 NOT NULL,
+   F_PUBLISHED          BOOL                 NOT NULL DEFAULT FALSE,
+   F_SORT               INT2                 NOT NULL DEFAULT 0,
+   F_ACTIVE             BOOL                 NOT NULL DEFAULT TRUE,
+   F_CREATE_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_MODIFY_TIME        TIMESTAMP            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   F_REMARK             TEXT                 NULL,
+   CONSTRAINT PK_T_JSON_TREE_DATA PRIMARY KEY (F_ID)
+);
+
+COMMENT ON TABLE T_JSON_TREE_DATA IS
+'json树型数据';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_ID IS
+'编号';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_GROUP_ID IS
+'分组编号';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_NAME IS
+'名称';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_DATASOURCE IS
+'数据源名称';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_TABLE_NAME IS
+'主表表名';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_CONDITION IS
+'主表条件';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_RECURSIVE_TABLE_NAME IS
+'递归表名';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_RECURSIVE_CONDITION IS
+'递归条件';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_COMMAND_TEXT IS
+'输出语句';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_PUBLISHED IS
+'是否发布';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_SORT IS
+'排序编号';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_ACTIVE IS
+'是否有效';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_CREATE_TIME IS
+'创建时间';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_MODIFY_TIME IS
+'修改时间';
+
+COMMENT ON COLUMN T_JSON_TREE_DATA.F_REMARK IS
+'备注';
+
