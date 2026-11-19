@@ -20,7 +20,8 @@ type ServiceConf struct {
 	// ServiceType 服务类型 Rest 1 RpcClient 2 RpcServer 4,如果没有配置，默认是Website 1
 	ServiceType ServiceType     `json:",default=1"`
 	Plugins     map[string]bool `json:"Plugins"`
-	Redis       redis.RedisKeyConf
+	// Redis redis的可选配置，作为网站或etcd客户端时需要配置，服务端不走这里。
+	Redis redis.RedisKeyConf `json:",optional"`
 	SessionConf
 	Config `json:"-"`
 }
