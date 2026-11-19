@@ -17,10 +17,10 @@ type Config interface {
 }
 
 type ServiceConf struct {
-	// Service 服务类型 Rest 1 RpcClient 2 RpcServer 4,如果没有配置，默认是Website 1
-	Service ServiceType     `json:",default=1"`
-	Plugins map[string]bool `json:"Plugins"`
-	Redis   redis.RedisKeyConf
+	// ServiceType 服务类型 Rest 1 RpcClient 2 RpcServer 4,如果没有配置，默认是Website 1
+	ServiceType ServiceType     `json:",default=1"`
+	Plugins     map[string]bool `json:"Plugins"`
+	Redis       redis.RedisKeyConf
 	SessionConf
 	Config `json:"-"`
 }
@@ -32,7 +32,7 @@ func (sc ServiceConf) GetRedisConf() *redis.RedisKeyConf {
 	return &sc.Redis
 }
 func (sc ServiceConf) GetServiceType() ServiceType {
-	return sc.Service
+	return sc.ServiceType
 }
 
 func (sc ServiceConf) GetTokenReplaceTime() int64 {
@@ -83,8 +83,8 @@ func (rc RestConf) GetDbConfig() *ado.DbConfig {
 
 type RpcServerConf struct {
 	ServiceConf
-	zrpc.RpcServerConf
-	DbConfig *ado.DbConfig
+	RpcServerConfig zrpc.RpcServerConf //服务端配置里 也有redis 会冲突，我们需要放到下一级
+	DbConfig        *ado.DbConfig
 }
 
 func (rsc RpcServerConf) GetDbConfig() *ado.DbConfig {
@@ -94,7 +94,7 @@ func (rsc RpcServerConf) GetDbConfig() *ado.DbConfig {
 type RpcClientConf struct {
 	ServiceConf
 	rest.RestConf
-	zrpc.RpcClientConf
+	RpcClientConfig zrpc.RpcClientConf //客户端配置里 也有middlewares 会冲突，我们需要放到下一级
 }
 
 func (rcc RpcClientConf) GetDbConfig() *ado.DbConfig {
