@@ -20,8 +20,6 @@ type ServiceConf struct {
 	// ServiceType 服务类型 Rest 1 RpcClient 2 RpcServer 4,如果没有配置，默认是Website 1
 	ServiceType ServiceType     `json:",default=1"`
 	Plugins     map[string]bool `json:"Plugins"`
-	// Redis redis的可选配置，作为网站或etcd客户端时需要配置，服务端不走这里。
-	Redis redis.RedisKeyConf `json:",optional"`
 	SessionConf
 	Config `json:"-"`
 }
@@ -29,9 +27,7 @@ type ServiceConf struct {
 func (sc ServiceConf) GetPlugins() map[string]bool {
 	return sc.Plugins
 }
-func (sc ServiceConf) GetRedisConf() *redis.RedisKeyConf {
-	return &sc.Redis
-}
+
 func (sc ServiceConf) GetServiceType() ServiceType {
 	return sc.ServiceType
 }
@@ -75,29 +71,40 @@ func (e ServiceType) IsValid() bool {
 type RestConf struct {
 	ServiceConf
 	rest.RestConf
+	Redis    redis.RedisKeyConf `json:",optional"`
 	DbConfig *ado.DbConfig
 }
 
 func (rc RestConf) GetDbConfig() *ado.DbConfig {
 	return rc.DbConfig
 }
+func (rc RestConf) GetRedisConf() *redis.RedisKeyConf {
+	return &rc.Redis
+}
 
 type RpcServerConf struct {
 	ServiceConf
-	RpcServerConfig zrpc.RpcServerConf //服务端配置里 也有redis 会冲突，我们需要放到下一级
-	DbConfig        *ado.DbConfig
+	zrpc.RpcServerConf
+	DbConfig *ado.DbConfig
 }
 
 func (rsc RpcServerConf) GetDbConfig() *ado.DbConfig {
 	return rsc.DbConfig
 }
+func (rsc RpcServerConf) GetRedisConf() *redis.RedisKeyConf {
+	return &rsc.Redis
+}
 
 type RpcClientConf struct {
 	ServiceConf
 	rest.RestConf
+	Redis           redis.RedisKeyConf `json:",optional"`
 	RpcClientConfig zrpc.RpcClientConf //客户端配置里 也有middlewares 会冲突，我们需要放到下一级
 }
 
 func (rcc RpcClientConf) GetDbConfig() *ado.DbConfig {
 	return nil
+}
+func (rcc RpcClientConf) GetRedisConf() *redis.RedisKeyConf {
+	return &rcc.Redis
 }

@@ -30,14 +30,6 @@ type ServiceObject struct {
 
 func NewServiceContext[T Config](cfg T) *ServiceContext[T] {
 	redisClient := redis.MustNewRedis(cfg.GetRedisConf().RedisConf) //加入redis
-	if cfg.GetRedisConf() != nil {
-		switch any(cfg).(type) {
-		case RpcServerConf:
-			serverCfg := any(cfg).(RpcServerConf)
-			serverCfg.RpcServerConfig.Redis = *cfg.GetRedisConf() //配置进去给etcd使用
-		default:
-		}
-	}
 	return &ServiceContext[T]{
 		Config:      cfg,
 		Services:    make(map[string]ServiceObject),   //初始化服务容器
