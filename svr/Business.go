@@ -1,7 +1,7 @@
 package svr
 
 import (
-	"github.com/deleteelf/zero-core/ado"
+	"github.com/DeleteElf/zero-core/ado"
 )
 
 // Business 业务层基类
